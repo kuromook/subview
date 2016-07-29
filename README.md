@@ -1,8 +1,8 @@
 # subview
 
-clip studio paint のサブビューに指定フォルダ内の画像ファイルを一括して登録します 
-暫定的に ~/Desktop/tmpフォルダを対象にしています
-CLIP STUDIO PAINT が起動している状態で実行しても反映されません
+clip studio paint のサブビューに指定フォルダ内の画像ファイルを一括して登録します  
+暫定的に ~/Desktop/tmpフォルダを対象にしています  
+CLIP STUDIO PAINT が起動している状態で実行しても反映されません  
 画像ファイルは拡張子 jpg / jpeg / png です  
 
 現在mac / win でとりあえず動くことを確認  
