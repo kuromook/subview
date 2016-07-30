@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
+import os
 
 SQL_FILE_NAME = "~/Documents/CELSYS/CLIPStudioPaintVer1_5_0/SubView/default.psv"
 DST_FOLDER_PATH = "~/Desktop/tmp"
 EXTENTIONS = ["png", "jpg", "jpeg"]
+REPLACE = True
 
 
 def storeDb(file_name, sql, data):
@@ -21,7 +23,7 @@ def storeDb(file_name, sql, data):
 
 
 def readDb(file_name, table_name):
-    '''read data from db
+    '''read data from table
 '''
     conn = sqlite3.connect(file_name)
     sql = "select * from TABLENAME"
@@ -32,10 +34,22 @@ def readDb(file_name, table_name):
     return ary
 
 
+def clearDb(file_name, table_name):
+    '''truncate table in db
+'''
+    conn = sqlite3.connect(file_name)
+    sql = "delete from TABLENAME"
+    sql = sql.replace("TABLENAME", table_name)
+    c = conn.execute(sql)
+    ary = c.fetchall()
+    conn.close()
+    return ary
+
+
 def getFiles(path=DST_FOLDER_PATH):
     '''get files list in directory
 '''
-    import glob, os
+    import glob
     filepath = os.path.expanduser(DST_FOLDER_PATH)
     files = []
     for ext in EXTENTIONS:
@@ -44,7 +58,8 @@ def getFiles(path=DST_FOLDER_PATH):
 
 
 def getExists():
-    import os
+    '''get files list in table
+'''
     sql_file = os.path.expanduser(SQL_FILE_NAME)
 
     ary = readDb(sql_file, "subviewimagecategory")
@@ -53,11 +68,17 @@ def getExists():
     return ary
 
 
-def insertFiles(ary=[]):
-    '''store files to db
+def clearSubview():
+    '''clear data in table
 '''
-    import os
+    sql_file = os.path.expanduser(SQL_FILE_NAME)
+    clearDb(sql_file, "subviewimagecategory")
+    return
 
+
+def insertFiles(ary=[]):
+    '''store files to table
+'''
     sql_file = os.path.expanduser(SQL_FILE_NAME)
 
     for filepath in ary:
@@ -69,7 +90,14 @@ def insertFiles(ary=[]):
     return
 
 
-exists = getExists()
-files = getFiles()
-files = [f for f in files if not f in exists]
-insertFiles(files)
+def main():
+    files = getFiles()
+
+    if REPLACE:
+        clearSubview()
+    else:
+        exists = getExists()
+        files = [f for f in files if not f in exists]
+    insertFiles(files)
+
+main()
