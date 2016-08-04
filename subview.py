@@ -8,6 +8,16 @@ SQL_FILE_NAME = "~/Documents/CELSYS/CLIPStudioPaintVer1_5_0/SubView/default.psv"
 DST_FOLDER_PATH = "~/Desktop/tmp"
 EXTENTIONS = ["png", "jpg", "jpeg"]
 REPLACE = True
+ASK_DIR = True
+
+def folderDialog():
+    import tkinter, tkinter.filedialog
+    import os
+
+    root = tkinter.Tk()
+    dirname = tkinter.filedialog.askdirectory(parent=root,initialdir="~/Desktop",title='Please select a directory')
+    if len(dirname) > 0:
+        return dirname
 
 
 def storeDb(file_name, sql, data):
@@ -37,20 +47,22 @@ def readDb(file_name, table_name):
 def clearDb(file_name, table_name):
     '''truncate table in db
 '''
+    SQL_FILE_NAME = "~/Documents/CELSYS/CLIPStudioPaintVer1_5_0/SubView/default.psv"
+    file_name = os.path.expanduser(SQL_FILE_NAME)
     conn = sqlite3.connect(file_name)
     sql = "delete from TABLENAME"
     sql = sql.replace("TABLENAME", table_name)
     c = conn.execute(sql)
-    ary = c.fetchall()
+    conn.commit()
     conn.close()
-    return ary
+    return
 
 
 def getFiles(path=DST_FOLDER_PATH):
     '''get files list in directory
 '''
     import glob
-    filepath = os.path.expanduser(DST_FOLDER_PATH)
+    filepath = os.path.expanduser(path)
     files = []
     for ext in EXTENTIONS:
         files.extend(glob.glob(filepath + "/*." + ext))
@@ -73,8 +85,9 @@ def clearSubview():
 '''
     sql_file = os.path.expanduser(SQL_FILE_NAME)
     clearDb(sql_file, "subviewimagecategory")
+    print("subview cleared")
     return
-
+    
 
 def insertFiles(ary=[]):
     '''store files to table
@@ -87,11 +100,10 @@ def insertFiles(ary=[]):
         data = (filepath, 80, 1, 1)
         sql = """INSERT INTO subviewimagecategory (subviewfilepath, subviewscale, subviewpositionx, subviewpositiony) VALUES(?,?,?,?);"""
         storeDb(sql_file, sql, data)
-    return
-
-
 def main():
-    files = getFiles()
+    dirname = folderDialog() if ASK_DIR else None
+    print(dirname)
+    files = getFiles(dirname)
 
     if REPLACE:
         clearSubview()
