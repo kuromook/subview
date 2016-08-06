@@ -112,4 +112,5 @@ def main():
         files = [f for f in files if not f in exists]
     insertFiles(files)
 
-main()
+if __name__ == '__main__':
+    main()
