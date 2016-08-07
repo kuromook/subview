@@ -4,11 +4,12 @@
 import sqlite3
 import os
 
-SQL_FILE_NAME = "~/Documents/CELSYS/CLIPStudioPaintVer1_5_0/SubView/default.psv"
-DST_FOLDER_PATH = "~/Desktop/tmp"
-EXTENTIONS = ["png", "jpg", "jpeg"]
 REPLACE = True
 ASK_DIR = True
+EXTENTIONS = ["png", "jpg", "jpeg"]
+SQL_FILE_NAME = "~/Documents/CELSYS/CLIPStudioPaintVer1_5_0/SubView/default.psv"
+SOURCE_FOLDER_PATH = "~/Desktop/tmp"
+
 
 def folderDialog():
     import tkinter, tkinter.filedialog
@@ -63,7 +64,7 @@ def clearDb(file_name, table_name):
     return
 
 
-def getFiles(path=DST_FOLDER_PATH):
+def getFiles(path=SOURCE_FOLDER_PATH):
     '''get files list in directory
 '''
     import glob
@@ -105,8 +106,10 @@ def insertFiles(ary=[]):
         data = (filepath, 80, 1, 1)
         sql = """INSERT INTO subviewimagecategory (subviewfilepath, subviewscale, subviewpositionx, subviewpositiony) VALUES(?,?,?,?);"""
         storeDb(sql_file, sql, data)
+
+
 def main():
-    dirname = folderDialog() if ASK_DIR else DST_FOLDER_PATH
+    dirname = folderDialog() if ASK_DIR else SOURCE_FOLDER_PATH
     print(dirname)
     files = getFiles(dirname)
 
