@@ -15,9 +15,14 @@ def folderDialog():
     import os
 
     root = tkinter.Tk()
+
     dirname = tkinter.filedialog.askdirectory(parent=root,initialdir="~/Desktop",title='Please select a directory')
     if len(dirname) > 0:
         return dirname
+    else:
+        import sys
+        sys.exit()
+        return
 
 
 def storeDb(file_name, sql, data):
@@ -101,7 +106,7 @@ def insertFiles(ary=[]):
         sql = """INSERT INTO subviewimagecategory (subviewfilepath, subviewscale, subviewpositionx, subviewpositiony) VALUES(?,?,?,?);"""
         storeDb(sql_file, sql, data)
 def main():
-    dirname = folderDialog() if ASK_DIR else None
+    dirname = folderDialog() if ASK_DIR else DST_FOLDER_PATH
     print(dirname)
     files = getFiles(dirname)
 
