@@ -16,7 +16,7 @@ def folderDialog():
     import os
 
     root = tkinter.Tk()
-
+    root.withdraw()
     dirname = tkinter.filedialog.askdirectory(parent=root,initialdir="~/Desktop",title='Please select a directory')
     if len(dirname) > 0:
         return dirname
@@ -53,7 +53,6 @@ def readDb(file_name, table_name):
 def clearDb(file_name, table_name):
     '''truncate table in db
 '''
-    SQL_FILE_NAME = "~/Documents/CELSYS/CLIPStudioPaintVer1_5_0/SubView/default.psv"
     file_name = os.path.expanduser(SQL_FILE_NAME)
     conn = sqlite3.connect(file_name)
     sql = "delete from TABLENAME"
@@ -101,7 +100,6 @@ def insertFiles(ary=[]):
     sql_file = os.path.expanduser(SQL_FILE_NAME)
 
     for filepath in ary:
-        #filepath = str(filepath)
         print(filepath)
         data = (filepath, 80, 1, 1)
         sql = """INSERT INTO subviewimagecategory (subviewfilepath, subviewscale, subviewpositionx, subviewpositiony) VALUES(?,?,?,?);"""
