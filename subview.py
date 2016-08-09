@@ -11,13 +11,13 @@ SQL_FILE_NAME = "~/Documents/CELSYS/CLIPStudioPaintVer1_5_0/SubView/default.psv"
 SOURCE_FOLDER_PATH = "~/Desktop/tmp"
 
 
-def folderDialog():
+def folderDialog(message='Please select a directory'):
     import tkinter, tkinter.filedialog
     import os
 
     root = tkinter.Tk()
     root.withdraw()
-    dirname = tkinter.filedialog.askdirectory(parent=root,initialdir="~/Desktop",title='Please select a directory')
+    dirname = tkinter.filedialog.askdirectory(parent=root,initialdir="~/Desktop",title=message)
     if len(dirname) > 0:
         return dirname
     else:
@@ -107,9 +107,8 @@ def insertFiles(ary=[]):
 
 
 def main():
-    dirname = folderDialog() if ASK_DIR else SOURCE_FOLDER_PATH
-    print(dirname)
-    files = getFiles(dirname)
+    files = getFiles(folderDialog('Please select 1st directory'))
+    files.extend(getFiles(folderDialog('Please select 2nd directory')))
 
     if REPLACE:
         clearSubview()
