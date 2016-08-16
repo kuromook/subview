@@ -4,14 +4,11 @@ clip studio paint のサブビューに指定フォルダ内の画像ファイ�
 CLIP STUDIO PAINT が起動している状態で実行しても反映されません  
 
 
-GUI仕様
-commit 登録実行  
-append フォルダを選択する（複数回可能)  
-exit 何もせず終了
-
 現在mac / win でとりあえず動くことを確認  
 実行形式は win7にて確認　
 使用は自己責任にて
+
+GUI仕様への移行、現在はwork branchで作業
 
 考えてること
 * psvファイル中のsubviewimagecategoryの内容を別のdbファイルにバックアップし、再利用できるようにする
