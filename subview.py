@@ -3,6 +3,7 @@
 
 import sqlite3
 import os
+import sys
 
 REPLACE = True
 ASK_DIR = True
@@ -10,20 +11,47 @@ EXTENTIONS = ["png", "jpg", "jpeg"]
 SQL_FILE_NAME = "~/Documents/CELSYS/CLIPStudioPaintVer1_5_0/SubView/default.psv"
 SOURCE_FOLDER_PATH = "~/Desktop/tmp"
 
+imageFiles = []
 
-def folderDialog(message='Please select a directory'):
-    import tkinter, tkinter.filedialog
-    import os
 
-    root = tkinter.Tk()
-    root.withdraw()
-    dirname = tkinter.filedialog.askdirectory(parent=root,initialdir="~/Desktop",title=message)
-    if len(dirname) > 0:
-        return dirname
-    else:
-        import sys
-        sys.exit()
+def hearingDialog():
+    def wrap():
+        return folderDialog
+
+    def folderDialog(message='Please select a directory'):
+        import tkinter, tkinter.filedialog
+        import os
+
+        dirname = tkinter.filedialog.askdirectory(parent=commiter,initialdir="~/Desktop",title=message)
+        if len(dirname) > 0:
+            imageFiles.extend(getFiles(dirname))
         return
+
+    def commitwrap():
+        def commit():
+            files = imageFiles
+            if REPLACE:
+                clearSubview()
+            else:
+                exists = getExists()
+                files = [f for f in files if not f in exists]
+            insertFiles(files)
+            sys.exit()
+        return commit
+
+    from tkinter import Tk, Button
+    imageFiles = []
+
+    commiter = Tk()
+    button1 = Button(commiter, text='commit', command=commitwrap())
+    button1.pack()
+    button2 = Button(commiter, text='append', command=wrap())
+    button2.pack()
+    button3 = Button(commiter, text='exit', command=lambda: sys.exit(1))
+    button3.pack()
+
+    commiter.mainloop()
+    return
 
 
 def storeDb(file_name, sql, data):
@@ -106,16 +134,5 @@ def insertFiles(ary=[]):
         storeDb(sql_file, sql, data)
 
 
-def main():
-    files = getFiles(folderDialog('Please select 1st directory'))
-    files.extend(getFiles(folderDialog('Please select 2nd directory')))
-
-    if REPLACE:
-        clearSubview()
-    else:
-        exists = getExists()
-        files = [f for f in files if not f in exists]
-    insertFiles(files)
-
 if __name__ == '__main__':
-    main()
+    hearingDialog()
