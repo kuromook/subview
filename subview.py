@@ -12,7 +12,7 @@ SQL_FILE_NAME = "~/Documents/CELSYS/CLIPStudioPaintVer1_5_0/SubView/default.psv"
 SOURCE_FOLDER_PATH = "~/Desktop/tmp"
 
 imageFiles = []
-
+directories = []
 
 def hearingDialog():
     def wrap():
@@ -24,6 +24,8 @@ def hearingDialog():
 
         dirname = tkinter.filedialog.askdirectory(parent=commiter,initialdir="~/Desktop",title=message)
         if len(dirname) > 0:
+            directories.append(os.path.basename(dirname))
+            la.config(text=" \n".join(directories))
             imageFiles.extend(getFiles(dirname))
         return
 
@@ -39,7 +41,7 @@ def hearingDialog():
             sys.exit()
         return commit
 
-    from tkinter import Tk, Button
+    from tkinter import Tk, Button,Label
     imageFiles = []
 
     commiter = Tk()
@@ -49,7 +51,8 @@ def hearingDialog():
     button2.pack()
     button3 = Button(commiter, text='exit', command=lambda: sys.exit(1))
     button3.pack()
-
+    la = Label(text='/n'.join(directories), justify='left')
+    la.pack()
     commiter.mainloop()
     return
 
